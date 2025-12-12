@@ -1,0 +1,4 @@
+repository "startGateJam/StartGate_Gamejam@18967844618993@cloud"
+  path "/"
+    br "/main"
+    co "/main"
