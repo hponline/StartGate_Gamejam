@@ -10,18 +10,20 @@ public class PlayerCombat : MonoBehaviour
     [Header("Shooter Attack")]
     public Transform shooterBulletPrefab;
     public float ShooterFireRate = 0.3f;
-    public float ShooterAttackDamage = 10f;
+    public int ShooterAttackDamage = 10;
     public float shooterAttackTimer = 0;
     public bool shooterIsAttacking = false;
 
     [Header("Laser Attack")]
-    public Transform laserBulletPrefab;
-    public GameObject laserPrefab;
-    public float laserFireRate = 0.3f;
+    //public Transform laserBulletPrefab;
+    public LaserDamage laserDamage;
+    public ParticleSystem laserParticlePrefab;
+    public float laserFireRate = 3f;
     public float laserAttackDamage = 10f;
     public float laserAttackRange = 10f;
-    public float laserAttackTimer = 0;
-    public float laserActiveTimer = 3f;
+    [SerializeField] float laserAttackTimer = 0;
+    [SerializeField] float laserActiveTimer = 0f;
+    public float laserActiveDuration = 3f; // Laserin açýk kaldýgý süre
     public bool laserIsAttacking = false;
 
     private void Awake()
@@ -32,64 +34,65 @@ public class PlayerCombat : MonoBehaviour
     private void Update()
     {
         // karakter ateþ ettme mekanigi
+
+        UpdateAttackState();
+    }
+
+
+    void UpdateAttackState()
+    {
         shooterAttackTimer += Time.deltaTime;
         laserAttackTimer += Time.deltaTime;
-        laserActiveTimer += Time.deltaTime;
 
-
-        ShooterTimer();
-        LaserTimer();
-        
-
-    }
-
-    public void LaserTimer()
-    {
-        if (laserAttackTimer >= laserFireRate)
-            laserIsAttacking = false;
-        else
-        {
-            laserIsAttacking = true;
-            // laser kapatma yap
-            //if (laserActiveTimer > 3)
-            //{
-            //    laserPrefab.SetActive(false);
-            //    laserActiveTimer = 0f;
-            //}
-        }
-    }
-
-    public void ShooterTimer()
-    {
-        if (shooterAttackTimer >= ShooterFireRate)
+        if (shooterIsAttacking && shooterAttackTimer >= ShooterFireRate)
             shooterIsAttacking = false;
-        else
-            shooterIsAttacking = true;        
+
+        if (laserIsAttacking)
+        {
+            laserActiveTimer += Time.deltaTime;
+            if (laserActiveTimer >= laserActiveDuration)
+            {
+                StopLaser();
+            }
+        }
     }
 
     public void PlayerAttack()
     {
-        if (shooterAttackTimer >= ShooterFireRate)
-        {
-            Instantiate(shooterBulletPrefab, firePoint.position, transform.rotation);
-            shooterIsAttacking = true;
-            shooterAttackTimer = 0;
-            Debug.Log("Shooter Ateþ etti");
-            // vfx/sound
-        }
+        if (shooterIsAttacking) return;
+        if (shooterAttackTimer < ShooterFireRate) return;
+
+        Instantiate(shooterBulletPrefab, firePoint.position, transform.rotation);
+        shooterIsAttacking = true;
+        shooterAttackTimer = 0;
+        Debug.Log("Shooter Ateþ etti");
+        // vfx/sound
+    }
+    void StopLaser()
+    {
+        if (laserParticlePrefab.isPlaying)
+            laserParticlePrefab.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+
+        laserIsAttacking = false;
+        laserActiveTimer = 0;
+        laserDamage.StopLaser();
     }
 
     public void PlayerLaserAttack()
     {
-        if (laserAttackTimer >= laserFireRate)
-        {
-            //Instantiate(shooterBulletPrefab, firePoint.position, transform.rotation);
-            laserPrefab.SetActive(true);
-            laserIsAttacking = true;
-            laserAttackTimer = 0;
-            Debug.Log("Laser Ateþ etti");
-            // vfx/sound
-        }
+        if (laserIsAttacking) return;
+        if (laserAttackTimer < laserFireRate) return;
+        if (!laserParticlePrefab.isPlaying)
+            laserParticlePrefab.Play();
+
+        laserIsAttacking = true;
+        laserAttackTimer = 0;
+        laserActiveTimer = 0;
+
+        laserDamage.StartLaser();
+        Debug.Log("Laser Ateþ etti");
+        // vfx/sound
+
     }
 
 }
