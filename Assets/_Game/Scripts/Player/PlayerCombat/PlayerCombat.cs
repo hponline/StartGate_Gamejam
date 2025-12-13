@@ -4,10 +4,6 @@ public class PlayerCombat : MonoBehaviour
 {
     public static PlayerCombat instance;
 
-    [Header("Player")]
-    public int maxHealt = 100;
-    [SerializeField] int currentHealth;
-
     [Header("References")]
     public Transform firePoint;
 
@@ -36,9 +32,7 @@ public class PlayerCombat : MonoBehaviour
 
     private void Awake()
     {
-        instance = this;
-
-        currentHealth = maxHealt;
+        instance = this;        
     }
 
     private void Update()
@@ -105,29 +99,11 @@ public class PlayerCombat : MonoBehaviour
 
     public void PlayerUseShield()
     {
-        if (playerShield.isShieldActive) return;
-        playerShield.ActiveShield();
+        //if (playerShield.UseShield()) return;
+        playerShield.UseShield();
         Debug.Log("Player Shield kullandý");
     }
 
-    public void TakeDamage(int damage)
-    {
-        if (playerShield != null)
-            damage = playerShield.AbsorbDamage(damage);
-
-        if (damage <= 0) return;
-
-        currentHealth -= damage;
-
-        if (currentHealth <= 0)
-        {
-            Die();
-        }
-    }
-
-    public void Die()
-    {
-        Debug.Log("Player öldü");
-    }
+   
 
 }

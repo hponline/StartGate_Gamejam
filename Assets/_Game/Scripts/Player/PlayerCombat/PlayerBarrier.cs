@@ -2,77 +2,104 @@ using UnityEngine;
 
 public class PlayerBarrier : MonoBehaviour
 {
-    [Header("Barrier stats ")]
-    public GameObject shiledVFX;
-    //public int maxShiled = 100;
-    public float shieldDuration = 5f;
-    public float shieldCooldown = 15f;
+    private enum ShieldState
+    {
+        Ready,      
+        Active,     
+        Cooldown    
+    }
 
-    [SerializeField] float shieldCooldownTimer = 0f;
-    [SerializeField] float shieldActiveTimer = 0f;
+    [Header("Settings")]
+    [SerializeField] private float shieldDuration = 5f;
+    [SerializeField] private float shieldCooldown = 15f;
+    [SerializeField] private GameObject shieldVFX;
 
-    public bool isShieldActive = false;
-    public bool isShieldCooldwon = false;
+    [Header("Shield HP")]
+    public int maxShield = 100;
+    public int currentShield = 0;
 
-    [SerializeField] int currentShiled;
+    private ShieldState state = ShieldState.Ready;
+    [SerializeField]private float timer;
 
     private void Start()
     {
-        currentShiled = PlayerCombat.instance.maxShiled;
-        DeActiveShiled();
+        currentShield = maxShield;
     }
 
     private void Update()
     {
-        shieldActiveTimer += Time.deltaTime;
+        if (state == ShieldState.Ready)
+            return;
 
-        if (isShieldActive)
+        timer += Time.deltaTime;
+
+        switch (state)
         {
-            shieldActiveTimer += Time.deltaTime;
-            if (shieldActiveTimer >= shieldDuration)
-            {
-                DeActiveShiled();
-            }
+            case ShieldState.Active:
+                if (timer >= shieldDuration)
+                {
+                    DeactivateShield();
+                    state = ShieldState.Cooldown;
+                    timer = 0f;
+                }
+                break;
+
+            case ShieldState.Cooldown:
+                if (timer >= shieldCooldown)
+                {
+                    state = ShieldState.Ready;
+                    timer = 0f;
+                }
+                break;
         }
-        if (isShieldCooldwon)
+    }
+
+    public int AbsorbDamage(int damage)
+    {
+        if (state != ShieldState.Active)
+            return damage;
+
+        currentShield -= damage;
+
+        if (currentShield <= 0)
         {
-            shieldCooldownTimer += Time.deltaTime;
-            if (shieldCooldownTimer >= shieldCooldown)
-            {
-                isShieldActive = false;
-                shieldCooldownTimer = 0f;
-                // kalkan bitince yeniden aktifleþmiyor (F)
-            }
-        }
-    }
+            int remainingDamage = -currentShield;
 
-    public void ActiveShield()
-    {
-        currentShiled = PlayerCombat.instance.maxShiled;
-        isShieldActive = true;
-        shiledVFX.SetActive(true);
-    }
+            currentShield = 0;
+            DeactivateShield();
 
-    public void DeActiveShiled()
-    {
-        isShieldActive = false;
-        currentShiled = 0;
+            state = ShieldState.Cooldown;
+            timer = 0f;
 
-        shiledVFX.SetActive(false);
-    }
-
-    public int AbsorbDamage(int incomingDamage)
-    {
-        if (!isShieldActive) return incomingDamage;
-
-        currentShiled -= incomingDamage;
-        Debug.Log(currentShiled);
-        if (currentShiled <= 0)
-        {
-            int remainingDamage = -currentShiled;
-            DeActiveShiled();
             return remainingDamage;
         }
+
         return 0;
     }
+
+
+    public void UseShield()
+    {
+        if (state != ShieldState.Ready)
+            return;
+
+        ActivateShield();
+        state = ShieldState.Active;
+        timer = 0f;
+    }
+
+    private void ActivateShield()
+    {
+        currentShield = maxShield;
+        shieldVFX.SetActive(true);
+    }
+
+    private void DeactivateShield()
+    {
+        shieldVFX.SetActive(false);
+    }
+
+    // Debug / UI için
+    public bool IsReady() => state == ShieldState.Ready;
+    public bool IsActive() => state == ShieldState.Active;
 }
