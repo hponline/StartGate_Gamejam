@@ -11,11 +11,14 @@ namespace Game.Enemy
     public sealed class EnemyController : MonoBehaviour
     {
         private EnemyMovement movement;
+        private EnemyAttack attack;
 
         private void Awake()
         {
             // Enemy içindeki movement component’i alýnýr
             movement = GetComponent<EnemyMovement>();
+            // Enemy içindeki attack component’i alýnýr
+            attack = GetComponent<EnemyAttack>();
         }
 
         // Enemy spawn edildikten hemen sonra çaðrýlýr
@@ -23,6 +26,9 @@ namespace Game.Enemy
         {
             // Enemy base noktasýna doðru hareket etmeye baþlar
             movement.MoveTo(baseTarget.Position);
+
+            //Saldýrý sistemi hedefi tanýsýn
+            attack.Initialize(baseTarget);
         }
     }
 }
