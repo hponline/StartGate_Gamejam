@@ -10,8 +10,8 @@ public class PlayerBarrier : MonoBehaviour
     }
 
     [Header("Settings")]
-    [SerializeField] private float shieldDuration = 5f;
-    [SerializeField] private float shieldCooldown = 15f;
+    [SerializeField] public float shieldDuration = 5f;
+    [SerializeField] public float shieldCooldown = 10f;
     [SerializeField] private GameObject shieldVFX;
 
     [Header("Shield HP")]

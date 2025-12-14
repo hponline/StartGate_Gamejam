@@ -1,14 +1,12 @@
-using TMPro;
 using UnityEngine;
 
 public class EnemyHealt : MonoBehaviour
 {
     [SerializeField] EnemyHealthBar healthBar;
-    public GameObject floatingTextPrefab;
-
     public GameObject canvasHealth;
     public int health = 100;
     [SerializeField] public float currentHealth;
+
 
     private void Awake()
     {
@@ -22,7 +20,16 @@ public class EnemyHealt : MonoBehaviour
 
         if (currentHealth <= 0) 
         {
+            TryDropOrb();
             Destroy(gameObject);
+        }
+    }
+
+    void TryDropOrb()
+    {
+        if (Random.value <= 0.5f)
+        {
+            OrbSpawner.instance.SpawnRandomOrb(transform.position);
         }
     }
 }

@@ -2,18 +2,24 @@ using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
+    public static PlayerHealth instance;
     [SerializeField] PlayerBarrier playerShield;
-    
 
     [Header("Player")]
     public int maxHealt = 100;
-    [SerializeField] int currentHealth;
+    [SerializeField] public int currentHealth;
+
+    private void Awake()
+    {
+        instance = this;
+    }
 
     private void Start()
     {
         playerShield = GetComponent<PlayerBarrier>();
 
         currentHealth = maxHealt;
+        HealthClamp();
     }
 
     public void TakeDamage(int damage)
@@ -26,7 +32,7 @@ public class PlayerHealth : MonoBehaviour
         if (damage <= 0) return;
 
         currentHealth -= damage;
-        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealt);
+        HealthClamp();
 
         if (currentHealth <= 0)
         {
@@ -34,7 +40,16 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
-    
+    public void SetHeal(int amount)
+    {
+        currentHealth += amount;
+        HealthClamp();
+    }
+
+    void HealthClamp()
+    {
+        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealt);
+    }    
 
     public void Die()
     {
