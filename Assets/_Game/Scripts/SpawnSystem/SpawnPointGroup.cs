@@ -12,7 +12,7 @@ namespace Game.Spawning
     {
         // Inspector’dan manuel baðlanýr
         [SerializeField]
-        private List<SpawnPoint> spawnPoints = new();
+        public List<SpawnPoint> spawnPoints = new();
 
         // Rastgele bir spawn noktasý döner
         public SpawnPoint GetRandom()

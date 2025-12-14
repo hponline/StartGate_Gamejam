@@ -6,7 +6,8 @@ public class Orb_Shield : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        playerBarrier.UseShield();
+        if (playerBarrier.IsActive())
+            playerBarrier.UseShield();
 
         Destroy(gameObject);
     }

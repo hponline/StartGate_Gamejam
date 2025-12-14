@@ -7,6 +7,8 @@ public class EnemyHealt : MonoBehaviour
     public int health = 100;
     [SerializeField] public float currentHealth;
 
+    [SerializeField] FloatingTxt floatingTextPrefab;
+    [SerializeField] Vector3 textOffset = new Vector3(0, 2f, 0);
 
     private void Awake()
     {
@@ -18,7 +20,8 @@ public class EnemyHealt : MonoBehaviour
         currentHealth -= damage;
         healthBar.UpdateHealhtBar(health, currentHealth);
 
-        if (currentHealth <= 0) 
+        SpawnFloatingText(damage);
+        if (currentHealth <= 0)
         {
             TryDropOrb();
             Destroy(gameObject);
@@ -32,4 +35,18 @@ public class EnemyHealt : MonoBehaviour
             OrbSpawner.instance.SpawnRandomOrb(transform.position);
         }
     }
+
+    void SpawnFloatingText(float damage)
+    {
+        if (floatingTextPrefab == null) return;
+
+        FloatingTxt txt = Instantiate(
+            floatingTextPrefab,
+            transform.position + textOffset,
+            Quaternion.identity
+        );
+
+        txt.SetText(damage);
+    }
+
 }

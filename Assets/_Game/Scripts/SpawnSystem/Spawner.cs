@@ -4,6 +4,7 @@
 using UnityEngine;
 using Game.Enemy;
 using Game.Combat;
+using System.Collections;
 
 namespace Game.Spawning
 {
@@ -31,7 +32,7 @@ namespace Game.Spawning
         private void Start()
         {
             Spawn(enemyCount);
-
+            NextLevel();
         }
 
         // Enemy spawn iþlemi
@@ -54,6 +55,22 @@ namespace Game.Spawning
                     enemyInstance.GetComponent<EnemyController>();
                 // Enemy base’e yönlendirilir
                 enemyController.Initialize(baseTarget);
+            }
+           
+        }
+
+        public void NextLevel()
+        {
+            StartCoroutine(Repeat());
+        }
+
+        IEnumerator Repeat()
+        {
+            yield return new WaitForSeconds(5f);
+            while (true)
+            {
+                Spawn(enemyCount);
+                yield return new WaitForSeconds(5f);
             }
         }
 
