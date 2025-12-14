@@ -16,7 +16,6 @@ public class EnemyHealt : MonoBehaviour
     {
         currentHealth -= damage;
         healthBar.UpdateHealhtBar(health, currentHealth);
-        Debug.Log(currentHealth);
         if (currentHealth <= 0) 
         {
             Destroy(gameObject);

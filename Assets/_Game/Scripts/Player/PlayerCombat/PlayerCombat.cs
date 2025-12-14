@@ -37,8 +37,6 @@ public class PlayerCombat : MonoBehaviour
 
     private void Update()
     {
-        // karakter ateþ ettme mekanigi
-
         UpdateAttackState();
     }
 
@@ -70,6 +68,8 @@ public class PlayerCombat : MonoBehaviour
         shooterAttackTimer = 0;
         Debug.Log("Shooter Ateþ etti");
         // vfx/sound
+
+        TowerManager.instance.OnOrbCollected();
     }
 
     public void PlayerLaserAttack()

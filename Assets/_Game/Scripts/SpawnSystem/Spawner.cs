@@ -20,6 +20,9 @@ namespace Game.Spawning
         // Enemy’lerin gideceði Base
         [SerializeField] private BaseTarget baseTarget;
 
+        public int enemyCount = 5;
+
+
         private void Awake()
         {
             baseTarget = GameObject.FindGameObjectWithTag("BASE").GetComponent<BaseTarget>();
@@ -27,30 +30,31 @@ namespace Game.Spawning
 
         private void Start()
         {
-            SpawnTest();
+            Spawn(enemyCount);
 
         }
 
         // Enemy spawn iþlemi
-        public void Spawn()
+        public void Spawn(int count)
         {
             // Rastgele spawn noktasý seç
             SpawnPoint spawnPoint = spawnPointGroup.GetRandom();
             if (spawnPoint == null) return;
 
             // Enemy instantiate edilir
-            GameObject enemyInstance = Instantiate(
-                enemyPrefab,
-                spawnPoint.Position,
-                spawnPoint.Rotation
-            );
-
-            // Enemy controller alýnýr
-            EnemyController enemyController =
-                enemyInstance.GetComponent<EnemyController>();
-
-            // Enemy base’e yönlendirilir
-            enemyController.Initialize(baseTarget);
+            for (int i = 0; i < count; i++)
+            {
+                GameObject enemyInstance = Instantiate(
+                                enemyPrefab,
+                                spawnPoint.Position,
+                                spawnPoint.Rotation
+                            );
+                // Enemy controller alýnýr
+                EnemyController enemyController =
+                    enemyInstance.GetComponent<EnemyController>();
+                // Enemy base’e yönlendirilir
+                enemyController.Initialize(baseTarget);
+            }
         }
 
 #if UNITY_EDITOR
@@ -58,7 +62,7 @@ namespace Game.Spawning
         [ContextMenu("Spawn Test")]
         private void SpawnTest()
         {
-            Spawn();
+            //Spawn();
         }
 #endif
     }
