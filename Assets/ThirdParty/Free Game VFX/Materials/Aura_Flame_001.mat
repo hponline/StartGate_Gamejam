@@ -84,7 +84,7 @@ Material:
     - _Depthpower: 1
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
-    - _Emission: 2
+    - _Emission: 6
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
@@ -108,3 +108,4 @@ Material:
     - _SpeedMainTexUVNoiseZW: {r: 0, g: 0, b: 0, a: 0}
     - _TintColor: {r: 0.7205882, g: 0.38441116, b: 0.23313148, a: 0.36}
   m_BuildTextureStacks: []
+  m_AllowLocking: 1
