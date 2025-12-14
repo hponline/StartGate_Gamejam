@@ -3,6 +3,7 @@ using UnityEngine;
 public class PlayerHealth : MonoBehaviour
 {
     [SerializeField] PlayerBarrier playerShield;
+    
 
     [Header("Player")]
     public int maxHealt = 100;
@@ -27,12 +28,13 @@ public class PlayerHealth : MonoBehaviour
         currentHealth -= damage;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealt);
 
-        Debug.Log(currentHealth);
         if (currentHealth <= 0)
         {
             Die();
         }
     }
+
+    
 
     public void Die()
     {

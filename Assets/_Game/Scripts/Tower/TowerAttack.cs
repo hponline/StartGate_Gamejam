@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class TowerAttack : MonoBehaviour
@@ -7,7 +8,7 @@ public class TowerAttack : MonoBehaviour
     public float attackRange = 8f;
     public float attackInterval = 3f;
 
-    [SerializeField]float timer = 0f;
+    [SerializeField] float timer = 0f;
 
     private void Update()
     {
@@ -27,6 +28,7 @@ public class TowerAttack : MonoBehaviour
         {
             var enemy = collider.GetComponent<EnemyHealt>();
             if (enemy == null) continue;
+
             enemy.TakeDamage(attackDamage);
         }
     }

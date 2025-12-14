@@ -372,9 +372,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthBar: {fileID: 9071190357553585055}
+  floatingTextPrefab: {fileID: 6239417597905720216, guid: a49ffc0ac495abc4d949410c0c906a58, type: 3}
   canvasHealth: {fileID: 5185125339199759863}
   health: 100
   currentHealth: 0
+  floatingTxt: {fileID: 3484262363775617513, guid: a49ffc0ac495abc4d949410c0c906a58, type: 3}
 --- !u!95 &7239053493173317315
 Animator:
   serializedVersion: 7

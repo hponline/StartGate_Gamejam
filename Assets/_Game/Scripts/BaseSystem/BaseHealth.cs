@@ -23,7 +23,6 @@ namespace Game.Combat
             currentHealth -= damage;
             currentHealth = Mathf.Max(currentHealth, 0);
             healthBar.UpdateHealhtBar(maxHealth, currentHealth);
-            UnityEngine.Debug.Log($"Base Damage aldý! Kalan HP: {currentHealth}");
 
             if (currentHealth <= 0)
             {
